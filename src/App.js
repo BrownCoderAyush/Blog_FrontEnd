@@ -8,9 +8,20 @@ import ArticleList from './pages/ArticleList';
 import NotFoundPage from './pages/NotFound';
 import LoginPage from './pages/LoginPage';
 import CreateAccountPage from './pages/CreateAccountPage';
+import { createContext, useEffect, useState } from 'react';
+import getJWTToken from './hooks/cookie';
+
+export const context = createContext();
 
 function App() {
+  const [user , setUser]=useState(null); 
+  useEffect(function(){
+    const res = getJWTToken();
+    setUser(res);
+  },[])
+
   return (
+    <context.Provider value={{user,setUser}}>
     <div className="App">
      <Navbar/>
      <div id="page-body">
@@ -25,6 +36,7 @@ function App() {
       </Routes>
       </div>  
     </div>
+    </context.Provider>
       
   );
 }

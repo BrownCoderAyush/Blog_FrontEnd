@@ -9,7 +9,6 @@ const ArticleListReuse = ({ articles }) => {
     const {user , isLoggedIn} = useUser();
     return (
         <>
-            {/* {user ? <p>Hello buddy</p>:<p>Bye bye already</p>} */}
             {articles.map(((article, index) => {
                 return (<div key={index}>
                     <Link className="article-list-item" to={`/articles/${article.name}`}>

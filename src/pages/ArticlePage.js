@@ -1,26 +1,22 @@
 import { useParams  , Link} from "react-router-dom";
 import axios from "axios";
 import NotFoundPage from "./NotFound";
-import { useState, useEffect } from "react";
+import { useState, useEffect ,useContext } from "react";
 import CommentsList from "../components/CommentsList";
 import AddCommentForm from "../components/AddCommentForm";
-import useUser from "../hooks/useUser";
+import { context } from "../App";
 
 
 const ArticlePage = () => {
     const [articleInfo, setArticleInfo] = useState({ name:null ,upvotes: 0, comments: [] });
     const { articleId } = useParams();
-    const {user , isLoading} = useUser();
+    const {user , setUser} = useContext(context);
 
 
     useEffect(() => {
         const loadArticleInfo = async () => {
             try {
-                const token = user && await user.getIdToken();
-                const headers = token ? {authtoken : token}:{};
-                const response = await axios.get(`/api/articles/${articleId}`,{
-                    headers
-                });
+                const response = await axios.get(`/api/articles/${articleId}`);
                 const newArticleInfo = response.data.data[0];
                 setArticleInfo(newArticleInfo); 
             } catch (error) {
@@ -33,11 +29,8 @@ const ArticlePage = () => {
     const addUpvote = async()=>{
         try {
             console.log("add upvote begins")
-            const token = user && await user.getIdToken();
-            const headers = token ? {authtoken : token}:{};
-            const response = await axios.put(`/api/articles/${articleId}/upvote`, null ,{
-                headers
-            }); 
+            
+            const response = await axios.put(`/api/articles/${articleId}/upvote`); 
             console.log(response , "response");
              setArticleInfo({...articleInfo , upvotes : response.data.upvotes});  
             

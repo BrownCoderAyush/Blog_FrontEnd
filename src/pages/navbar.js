@@ -1,8 +1,12 @@
 import { Link  , useNavigate} from "react-router-dom";
-import useUser from "../hooks/useUser";
-import { getAuth , signOut } from "firebase/auth";
+import Cookies from "js-cookie";
+import { context } from "../App";
+import { useContext } from "react";
+
+
 const Navbar = ()=>{
-    const {user , isLoading} = useUser();
+    // const {user , isLoading} = useUser();
+    const {user , setUser} = useContext(context);
     const navigate = useNavigate();
     return (
     <nav>
@@ -12,9 +16,7 @@ const Navbar = ()=>{
             <li><Link to="/articles">Articles</Link></li>
         </ul>
         <div className="nav-right">
-            {user?<button  onClick={()=>{
-                signOut(getAuth());
-            }}>LogOut</button>:<button onClick={()=>{ navigate('/login')}}>LogIn</button>}
+            {user?<button  onClick={()=>{ Cookies.remove('jwtToken'); setUser(null); }}>LogOut</button>:<button onClick={()=>{ navigate('/login')}}>LogIn</button>}
         </div>
     </nav>
     )

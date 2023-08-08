@@ -1,21 +1,22 @@
 import ArticleListReuse from "../components/ArticleList";
 import axios from "axios";
-import { useEffect,useState } from "react";
+import { context } from "../App";
+import { useContext, useEffect,useState } from "react";
 
 const ArticleList = ()=>{
     const [article , setArticles ] = useState([]);
+    const {user,setUser} = useContext(context);
+
+    
     useEffect(()=>{
         async function fetchArticles(){
             const response = await axios.get('/api/articles');
-            console.log(response);
-            setArticles(response.data.data);
-            
+            setArticles(response.data.data);     
         }
         fetchArticles();
     },[])
     return (
         <>
-        {console.log(article)};
         <h1>Articles</h1>
         <ArticleListReuse  articles={article}/>
         </>
